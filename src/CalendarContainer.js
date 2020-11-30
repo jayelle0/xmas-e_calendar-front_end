@@ -21,7 +21,7 @@ export default class CalendarContainer extends React.Component {
                         render = {({match})=> {
                             let id= parseInt(match.params.id)
                             let foundCalendar =this.props.calendars.find((calendar)=> calendar.id === id)
-                            console.log(foundCalendar)
+                            // console.log(foundCalendar)
                             return  <Calendar calendar = {foundCalendar}/>
                     }}
                     />

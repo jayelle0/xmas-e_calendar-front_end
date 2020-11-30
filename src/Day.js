@@ -3,7 +3,8 @@ import DayForm from './Dayform.js'
 
 class Day extends React.Component {
     state = {
-        display: false
+        display: false,
+        dayObj: this.props.dayObj
     }
     renderDayForm = () => {
         console.log("working")
@@ -11,12 +12,18 @@ class Day extends React.Component {
             this.setState({display:!this.state.display})
         )
     }
+
+    submitHandler = (newDayObj) => {
+        console.log(newDayObj)
+        this.setState({dayObj: newDayObj})
+    }
     renderDay(){
         return (
             <div>
-                <h5>{this.props.date}</h5>
+                {/* <h5>{this.state.dayObj.date}</h5>
+                <h3>{this.state.dayObj.content}</h3> */}
                 <button onClick={this.renderDayForm}>Edit</button>
-                <DayForm display = {this.state.display}/>
+                <DayForm display = {this.state.display} date = {this.props.date} calendarId = {this.props.calendarId} submitHandler={this.submitHandler}/>
             </div>
         )
     }
