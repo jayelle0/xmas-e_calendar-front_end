@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Link, Route , Switch} from 'react-router-dom'
 import Calendar from './Calendar'
 
 export default class CalendarContainer extends React.Component {
-
     renderCalendars = () => {
         return this.props.calendars.map(calendarObj => 
         <li>
@@ -18,18 +17,26 @@ export default class CalendarContainer extends React.Component {
             <div>
                 <Router>
                     <Route 
-                        exact path="/calendars/:id"
+                        path="/calendars/:id"
                         render = {({match})=> {
                             let id= parseInt(match.params.id)
                             let foundCalendar =this.props.calendars.find((calendar)=> calendar.id === id)
-                            return  <Calendar calendars = {foundCalendar}/>
+                            console.log(foundCalendar)
+                            return  <Calendar calendar = {foundCalendar}/>
                     }}
                     />
+                    <Route path="/calendars" render = {()=> {
+                        return (
+                            <ul>
+                                {this.renderCalendars()} 
+                            </ul>
+                        )
+                    }
+                }
+                />
                 </Router>
-                <ul>
-                    {this.renderCalendars()} 
-                </ul>
             </div>
         )
+        
     }
 }
