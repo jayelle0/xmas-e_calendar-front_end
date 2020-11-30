@@ -1,9 +1,9 @@
 import './App.css';
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Route , Switch} from 'react-router-dom'
 import React from 'react'
 import NavBar from "./Navbar"
-import Menu from './Menu.js'
 import CalendarContainer from './CalendarContainer.js'
+import Calendar from './Calendar.js'
 import LogIn from './LogIn.js'
 import Home from './Home'
 
@@ -27,25 +27,10 @@ export default class App extends React.Component {
           <NavBar /> 
           <Route exact path="/" component={LogIn}/>
           <Route exact path="/home" component={Home}/>
-          <Route 
-            path="/calendars/:id"
-            render = {()=> {
-              <CalendarContainer calendars = {this.state.calendars}/>
-            }}
-          />
-            <Route exact path="/calendars" render={() => <Menu calendars = {this.state.calendars}/>}/>
-        
-          
-
-          {/* <Route path="/calendar-form" component={CalendarForm}/>  */}
+          <Route exact path="/calendars" render={() => <CalendarContainer calendars = {this.state.calendars}/>}/>
+          <Route exact path="/temp-calendar" render= { ()=> <Calendar  {...this.state.calendars[0]}/>}/>
         </div>
       </Router>
-      // <div >
-      //   <h1>App</h1> 
-      //   <LogIn/>
-      //   <Menu />
-      //   <CalendarContainer />
-      // </div>
     );
   }
   }

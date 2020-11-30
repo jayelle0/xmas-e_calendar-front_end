@@ -36,3 +36,26 @@
     transform: rotate(360deg);
   }
 }
+
+.container {
+  display: grid;
+  justify-content: center;
+  height: 500px;
+  width: 100%;
+  margin-bottom: 5rem;
+  /* border: 1px solid black; */
+}
+
+.day {
+  height: 120px;
+  width: 120px;
+  border: 1px solid black;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 120px 120px 120px 120px 120px;
+  grid-template-rows: auto;
+  grid-template-areas: 
+    "day day day day day day day";
+}
