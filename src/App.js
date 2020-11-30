@@ -24,6 +24,7 @@ export default class App extends React.Component {
     return (
       <Router>
         <div>
+          <NavBar /> 
           <Route exact path="/" component={LogIn}/>
           <Route exact path="/home" component={Home}/>
           <Route 
@@ -32,13 +33,16 @@ export default class App extends React.Component {
               <CalendarContainer calendars = {this.state.calendars}/>
             }}
           />
+            <Route exact path="/calendars" render={() => <Menu calendars = {this.state.calendars}/>}/>
+        
+          
+
           {/* <Route path="/calendar-form" component={CalendarForm}/>  */}
         </div>
       </Router>
       // <div >
       //   <h1>App</h1> 
       //   <LogIn/>
-      //   <NavBar />
       //   <Menu />
       //   <CalendarContainer />
       // </div>
