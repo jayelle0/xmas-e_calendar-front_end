@@ -4,24 +4,22 @@ import DayForm from './Dayform.js'
 class Day extends React.Component {
     state = {
         display: false,
-        dayObj: this.props.dayObj
+        dayObj: this.props.day
     }
     renderDayForm = () => {
-        console.log("working")
         return (
             this.setState({display:!this.state.display})
         )
     }
 
     submitHandler = (newDayObj) => {
-        console.log(newDayObj)
         this.setState({dayObj: newDayObj})
     }
     renderDay(){
         return (
             <div>
-                {/* <h5>{this.state.dayObj.date}</h5>
-                <h3>{this.state.dayObj.content}</h3> */}
+                <h5>{this.state.dayObj.date}</h5>
+                <h3>{this.state.dayObj.content}</h3>
                 <button onClick={this.renderDayForm}>Edit</button>
                 <DayForm display = {this.state.display} date = {this.props.date} calendarId = {this.props.calendarId} submitHandler={this.submitHandler}/>
             </div>

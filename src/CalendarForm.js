@@ -3,7 +3,7 @@ import React from 'react'
 export default class CalendarForm extends React.Component {
 
     state = {
-        calendarName: ""
+        name: ""
     }
 
     changeHandler = (event) => {
@@ -14,8 +14,9 @@ export default class CalendarForm extends React.Component {
 
     newCalendar = (event) => {
         event.preventDefault() 
-        this.props.CalendarForm(this.state.calendarName)
-            // UPDATE USER ID
+        this.props.calendarForm(this.state)
+        this.setState({ name: ""})
+
     }
     
 
@@ -23,7 +24,7 @@ export default class CalendarForm extends React.Component {
         return  (
             <form onSubmit={this.newCalendar}>
             <label>Name Your Calendar</label>
-            <input onChange={this.changeHandler} value={this.state.calendarName} name="calendarName" ></input>
+            <input onChange={this.changeHandler} value={this.state.name} name="name" ></input>
             <button type="submit">Submit</button></form> 
         )
     }

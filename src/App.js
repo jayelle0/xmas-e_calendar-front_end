@@ -22,24 +22,62 @@ export default class App extends React.Component {
     })
   }
 
-  calendarForm(newCalendar) {
+  calendarForm = (newCalendar) => {
+    console.log(this.state)
     fetch('http://localhost:3000/calendars', {
       method: 'POST',
       headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "Accepts": "application/json"
       },
       body: JSON.stringify({
-        user_id:2, 
-        newCalendar})
+        user_id:7, 
+        name: newCalendar.name})
     })
     .then(response => response.json())
     .then(newCalendarObj => {
-      this.setState({calendars: [...this.state.calendars, newCalendarObj]})
-      console.log('Success:', newCalendarObj);
+      this.renderCalendarDays(newCalendarObj)
+      // this.setState({
+      //   calendars: this.state.calendars.concat(newCalendarObj)
+      // })
     })
+    // .then(data => {console.log(data)})
   }
   
-
+  renderCalendarDays = (calObj) => {
+ 
+    let date = 0
+    // let newArray = [...this.state.calendars]
+    // let index = newArray.findIndex(calendar => calendar.id === id)
+    // console.log(newArray)
+    for (let i = 0; i < 24; i++) {
+      date ++
+      fetch('http://localhost:3000/days', {
+        method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              date: date,
+              calendar_id: calObj.id
+          })
+        })
+      //   .then(response => response.json())
+      //   .then(newDayObj=> {
+      //     console.log(index)
+      //     newArray[index].days.concat(newDayObj)
+      //     this.setState({calendars:newArray})
+        
+      // })
+    }
+    this.setState({
+      calendars: this.state.calendars.concat(calObj)
+    })
+  }
+    
+    
+    
+  
   render(){
     return (
       <Router>
