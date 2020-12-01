@@ -4,13 +4,15 @@ import React from 'react'
 import NavBar from "./Navbar"
 import CalendarContainer from './CalendarContainer.js'
 import Calendar from './Calendar.js'
-import LogIn from './LogIn.js'
+import Signup from './Signup.js'
+import Login from './Login.js'
 import Home from './Home'
 import CalendarForm from './CalendarForm.js' 
 
 export default class App extends React.Component {
   state = {
-    calendars: []
+    calendars: [],
+    state: null 
   }
   componentDidMount(){
     fetch('http://localhost:3000/calendars')
@@ -23,6 +25,8 @@ export default class App extends React.Component {
   }
 
   calendarForm = (newCalendar) => {
+   let id = this.state.user.id
+
     console.log(this.state)
     fetch('http://localhost:3000/calendars', {
       method: 'POST',
@@ -31,7 +35,7 @@ export default class App extends React.Component {
           "Accepts": "application/json"
       },
       body: JSON.stringify({
-        user_id:7, 
+        user_id: id, 
         name: newCalendar.name})
     })
     .then(response => response.json())
@@ -75,7 +79,41 @@ export default class App extends React.Component {
     })
   }
     
-    
+    signupSubmitHandler = (newUser) => {
+      console.log(newUser)
+    fetch('http://localhost:3000/users', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json'
+      },
+      body: JSON.stringify(newUser)
+      })
+      .then(r => r.json())
+      .then(newUserObj => {
+        this.setState({user:newUserObj.user})
+        console.log(newUserObj)
+      });
+  }
+
+  loginHandler = (userLogin) => {
+
+  fetch('http://localhost:3000/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json'
+    },
+    body: JSON.stringify(userLogin)
+    })
+    .then(r => r.json())
+    .then(loggedInUser => {
+      this.setState({user:loggedInUser.user}
+        // , () => this.props.history.push('/calendars')
+        )
+
+    })
+}
     
   
   render(){
@@ -83,10 +121,11 @@ export default class App extends React.Component {
       <Router>
         <div>
           <NavBar /> 
-          <Route exact path="/" component={LogIn}/>
-          <Route exact path="/home" component={Home}/>
-          <Route exact path="/calendars" render={() => <CalendarContainer calendars = {this.state.calendars}/>}/>
-          <Route exact path ="/calendar-form" render={()=> <CalendarForm calendarForm={this.calendarForm} />}/>
+          <Route exact path="/signup"render={() => <Signup submitHandler = {this.signupSubmitHandler}/>}/>
+          <Route exact path="/login" render={() => <Login loginHandler = {this.loginHandler}/>}/>
+          <Route exact path="/" component={Home}/>
+          <Route exact path="/calendars" render={() => <CalendarContainer user= {this.state.user} calendars = {this.state.calendars}/>}/>
+          <Route exact path ="/calendar-form" render={()=> <CalendarForm user= {this.state.user} calendarForm={this.calendarForm} />}/>
         </div>
       </Router>
     );

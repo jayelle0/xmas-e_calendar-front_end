@@ -13,7 +13,12 @@ export default class CalendarContainer extends React.Component {
         )}
 
     render(){
+        console.log(this.props.calendars)
+    
         return (
+            <>
+           
+            { this.props.calendars === undefined? <h1> Loading Calendars</h1> :
             <div>
                 <Router>
                     <Route 
@@ -36,6 +41,8 @@ export default class CalendarContainer extends React.Component {
                 />
                 </Router>
             </div>
+            }
+            </>
         )
         
     }
