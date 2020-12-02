@@ -4,7 +4,7 @@ import Calendar from './Calendar'
 
 export default class CalendarContainer extends React.Component {
     renderCalendars = () => {
-        return this.props.calendars.map(calendarObj => 
+        return this.props.user.calendars.map(calendarObj => 
         <li>
             <Link to= {`calendars/${calendarObj.id}`}>{ calendarObj.name} </Link>
            <br></br>
@@ -13,7 +13,12 @@ export default class CalendarContainer extends React.Component {
         )}
 
     render(){
+        console.log(this.props)
+    
         return (
+            <>
+           
+            { this.props.user === undefined? <h1> Loading Calendars</h1> :
             <div>
                 <Router>
                     <Route 
@@ -36,6 +41,8 @@ export default class CalendarContainer extends React.Component {
                 />
                 </Router>
             </div>
+            }
+            </>
         )
         
     }

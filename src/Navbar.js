@@ -7,7 +7,7 @@ export default class NavBar extends React.Component {
         return (
             <div>
                 <ul>
-                    <NavLink to = "/home"> 
+                    <NavLink to = "/"> 
                         <li>Home </li>             
                      </NavLink>
                      <NavLink to = "/calendars"> 
