@@ -37,7 +37,6 @@ class App extends React.Component {
   calendarForm = (newCalendar) => {
    let id = this.state.user.id
    const token = localStorage.getItem('token');
-    console.log(this.state)
     fetch('http://localhost:3000/calendars', {
       method: 'POST',
       headers: {
@@ -72,7 +71,6 @@ class App extends React.Component {
     let newArray = {...userObj}
     let index = userObj.calendars.findIndex(calendar => calendar.id === calObj.id)
     let dayArray = []
-    console.log(newArray)
     for (let i = 0; i < 24; i++) {
       date ++
       fetch('http://localhost:3000/days', {
@@ -96,7 +94,6 @@ class App extends React.Component {
   }
     
     signupSubmitHandler = (newUser) => {
-      console.log(newUser)
     fetch('http://localhost:3000/users', {
       method: 'POST',
       headers: {
@@ -110,7 +107,7 @@ class App extends React.Component {
       .then(newUserObj => {
         this.setState({user:newUserObj.user})
         localStorage.setItem("token", newUserObj.jwt)
-        console.log(newUserObj)
+
       });
   }
 
@@ -130,11 +127,11 @@ class App extends React.Component {
       this.setState({user:loggedInUser.user}
         , () => this.props.history.push('/calendars')
         )
-        console.log(loggedInUser)
     })
 }
 
     createDayData = (id, dayState) => {
+      console.log("updating day")
       const token = localStorage.getItem('token');
       fetch(`http://localhost:3000/days/${id}`, {
           method: "PATCH",
@@ -147,12 +144,13 @@ class App extends React.Component {
       })
           .then(response => response.json())
           .then((updatedDayObj) => {
+            console.log("AFTER THEN STATEMENT")
             let newUser = {...this.state.user}
             let calendarIndex= newUser.calendars.findIndex(calendar=> calendar.id === dayState.calendar_id)
+            let dayIndex = newUser.calendars[calendarIndex].days.findIndex(day=> day.id === parseInt(id) )
+            newUser.calendars[calendarIndex].days.splice(dayIndex,1,updatedDayObj)
+            this.setState({user:newUser})
             // debugger
-            let dayIndex = newUser.calendars[calendarIndex].days.findIndex(day=> day.id === id )
-             newUser.calendars[calendarIndex].days[dayIndex] = updatedDayObj
-             this.setState({user:newUser})
 
           // this.props.submitHandler(this.state);
       })
@@ -178,19 +176,31 @@ class App extends React.Component {
     }
     
     renderCalendars = () => {
-      console.log("USER STATE", this.state.user)
-
-      return <CalendarContainer create= {this.createDayData} delete={ this.deleteDayData} user= {this.state.user}/>
-
+      return <CalendarContainer deleteCalendar={this.deleteCalendar} create= {this.createDayData} delete={ this.deleteDayData} user= {this.state.user}/>
     }
     
   renderCalendar = (routerProps) => {
-    console.log(routerProps)
     let id= parseInt(routerProps.match.params.id)
     let foundCalendar =this.state.user.calendars.find((calendar)=> calendar.id === id)
-    console.log(id)
     return  <Calendar calendar = {foundCalendar} create={this.createDayData} delete ={this.deleteDayData}/>
   }
+
+  deleteCalendar = (id) => {
+    const token = localStorage.getItem('token')
+    fetch(`http://localhost:3000/calendars/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    })
+    .then(() => {
+      let newUser = {...this.state.user}
+      let calendarIndex = newUser.calendars.findIndex(calendar => calendar.id === parseInt(id))
+      newUser.calendars.splice(calendarIndex, 1)
+      this.setState({user:newUser})
+    })
+  }
+
   render(){
     console.log(this.state)
     return (
