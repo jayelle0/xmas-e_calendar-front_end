@@ -1,5 +1,6 @@
 import React from 'react'
 import Day from './Day.js'
+import {withRouter} from 'react-router-dom'
 
 class Calendar extends React.Component{
 
@@ -10,8 +11,6 @@ class Calendar extends React.Component{
         
        return sortedArray.map(dayObj => <Day create ={this.props.create} delete={this.props.delete} day={dayObj} key={dayObj.id} calendarId= {this.props.calendar.id}/>)
     }
-
-
     render() {
         return (
             <div className="container">
@@ -21,4 +20,4 @@ class Calendar extends React.Component{
     }
 }
 
-export default Calendar 
+export default withRouter(Calendar) 

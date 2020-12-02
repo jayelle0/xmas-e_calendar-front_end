@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter as Router, Route , Switch} from 'react-router-dom'
+import { BrowserRouter as Router, Route , Switch, withRouter} from 'react-router-dom'
 import React from 'react'
 import NavBar from "./Navbar"
 import CalendarContainer from './CalendarContainer.js'
@@ -9,7 +9,7 @@ import Login from './LogIn.js'
 import Home from './Home'
 import CalendarForm from './CalendarForm.js' 
 
-export default class App extends React.Component {
+class App extends React.Component {
   state = {
     user: null 
   }
@@ -128,7 +128,7 @@ export default class App extends React.Component {
     .then(loggedInUser => {
       localStorage.setItem("token", loggedInUser.jwt)
       this.setState({user:loggedInUser.user}
-        // , () => this.props.history.push('/calendars')
+        , () => this.props.history.push('/calendars')
         )
         console.log(loggedInUser)
     })
@@ -175,23 +175,39 @@ export default class App extends React.Component {
           },
           body: JSON.stringify(data)
       })
-    }   
+    }
     
-  
+    renderCalendars = () => {
+      console.log("USER STATE", this.state.user)
+
+      return <CalendarContainer create= {this.createDayData} delete={ this.deleteDayData} user= {this.state.user}/>
+
+    }
+    
+  renderCalendar = (routerProps) => {
+    console.log(routerProps)
+    let id= parseInt(routerProps.match.params.id)
+    let foundCalendar =this.state.user.calendars.find((calendar)=> calendar.id === id)
+    console.log(id)
+    return  <Calendar calendar = {foundCalendar} create={this.createDayData} delete ={this.deleteDayData}/>
+  }
   render(){
     console.log(this.state)
     return (
-      <Router>
+      <Switch>
         <div>
           <NavBar /> 
           <Route exact path="/signup"render={() => <Signup submitHandler = {this.signupSubmitHandler}/>}/>
           <Route exact path="/login" render={() => <Login loginHandler = {this.loginHandler}/>}/>
           <Route exact path="/" component={Home}/>
-          <Route exact path="/calendars" render={() => <CalendarContainer create= {this.createDayData} delete={ this.deleteDayData} user= {this.state.user} />}/>
+          <Route path="/calendars/:id" render={this.renderCalendar}/>
+          <Route exact path="/calendars" render={this.renderCalendars}/>
           <Route exact path ="/calendar-form" render={()=> <CalendarForm user= {this.state.user} calendarForm={this.calendarForm} />}/>
         </div>
-      </Router>
+      </Switch>
     );
   }
   }
+
+  export default withRouter(App)
 
