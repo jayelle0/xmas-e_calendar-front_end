@@ -130,7 +130,7 @@ export default class App extends React.Component {
       this.setState({user:loggedInUser.user}
         // , () => this.props.history.push('/calendars')
         )
-
+        console.log(loggedInUser)
     })
 }
 
@@ -149,10 +149,10 @@ export default class App extends React.Component {
           .then((updatedDayObj) => {
             let newUser = {...this.state.user}
             let calendarIndex= newUser.calendars.findIndex(calendar=> calendar.id === dayState.calendar_id)
+            // debugger
             let dayIndex = newUser.calendars[calendarIndex].days.findIndex(day=> day.id === id )
              newUser.calendars[calendarIndex].days[dayIndex] = updatedDayObj
              this.setState({user:newUser})
-             debugger
 
           // this.props.submitHandler(this.state);
       })
