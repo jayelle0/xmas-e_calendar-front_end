@@ -12,27 +12,40 @@ import CalendarForm from './CalendarForm.js'
 export default class App extends React.Component {
   state = {
     calendars: [],
-    state: null 
+    user: null 
   }
-  componentDidMount(){
-    fetch('http://localhost:3000/calendars')
-    .then(r => r.json())
-    .then(calendars => {
-      this.setState({
-        calendars: calendars
-      })
-    })
-  }
+
+//   componentDidMount=() => {
+//     const token = localStorage.getItem('token');
+//     if (token ){
+//       let id = this.state.user.id
+//     fetch(`http://localhost:3000/users/${id}`, {
+//       method: 'GET',
+//       headers: {
+//         Authorization: `Bearer ${token}`
+//       }
+//     }) 
+//     .then(r => r.json())
+//     .then(user => {
+//       this.setState({ calendars: user.calendar })
+    
+//     })
+//   } 
+// }
+
+
 
   calendarForm = (newCalendar) => {
    let id = this.state.user.id
-
+   const token = localStorage.getItem('token');
     console.log(this.state)
     fetch('http://localhost:3000/calendars', {
       method: 'POST',
       headers: {
           "Content-Type": "application/json",
-          "Accepts": "application/json"
+          "Accepts": "application/json",
+          "Authorization": `Bearer ${token}`
+
       },
       body: JSON.stringify({
         user_id: id, 
@@ -40,7 +53,15 @@ export default class App extends React.Component {
     })
     .then(response => response.json())
     .then(newCalendarObj => {
+      let newUser = {...this.state.user}
+      
+      let newNewUser= newUser.calendars.concat(newCalendarObj)
+      this.setState({user: newNewUser})
+      console.log(newUser)
       this.renderCalendarDays(newCalendarObj)
+      //  pass in new user array as an argument, find index from this array and setstate with new array 
+      debugger
+
       // this.setState({
       //   calendars: this.state.calendars.concat(newCalendarObj)
       // })
@@ -49,7 +70,7 @@ export default class App extends React.Component {
   }
   
   renderCalendarDays = (calObj) => {
- 
+    const token = localStorage.getItem('token');
     let date = 0
     // let newArray = [...this.state.calendars]
     // let index = newArray.findIndex(calendar => calendar.id === id)
@@ -59,7 +80,8 @@ export default class App extends React.Component {
       fetch('http://localhost:3000/days', {
         method: "POST",
             headers: {
-              "Content-Type": "application/json"
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`
             },
             body: JSON.stringify({
               date: date,
@@ -74,9 +96,9 @@ export default class App extends React.Component {
         
       // })
     }
-    this.setState({
-      calendars: this.state.calendars.concat(calObj)
-    })
+    // this.setState({
+    //   calendars: this.state.calendars.concat(calObj)
+    // })
   }
     
     signupSubmitHandler = (newUser) => {
@@ -85,13 +107,15 @@ export default class App extends React.Component {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Accept: 'application/json'
+        Accept: 'application/json',
+ 
       },
       body: JSON.stringify(newUser)
       })
       .then(r => r.json())
       .then(newUserObj => {
         this.setState({user:newUserObj.user})
+        localStorage.setItem("token", newUserObj.jwt)
         console.log(newUserObj)
       });
   }
@@ -102,12 +126,14 @@ export default class App extends React.Component {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Accept: 'application/json'
+      Accept: 'application/json',
+    
     },
     body: JSON.stringify(userLogin)
     })
     .then(r => r.json())
     .then(loggedInUser => {
+      localStorage.setItem("token", loggedInUser.jwt)
       this.setState({user:loggedInUser.user}
         // , () => this.props.history.push('/calendars')
         )
@@ -117,6 +143,7 @@ export default class App extends React.Component {
     
   
   render(){
+    console.log(this.state)
     return (
       <Router>
         <div>
