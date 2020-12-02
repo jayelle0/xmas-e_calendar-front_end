@@ -13,7 +13,7 @@ export default class CalendarContainer extends React.Component {
         )}
 
     render(){
-        console.log(this.props)
+        console.log(this.props) 
     
         return (
             <>
@@ -25,9 +25,9 @@ export default class CalendarContainer extends React.Component {
                         path="/calendars/:id"
                         render = {({match})=> {
                             let id= parseInt(match.params.id)
-                            let foundCalendar =this.props.calendars.find((calendar)=> calendar.id === id)
+                            let foundCalendar =this.props.user.calendars.find((calendar)=> calendar.id === id)
                             // console.log(foundCalendar)
-                            return  <Calendar calendar = {foundCalendar}/>
+                            return  <Calendar create={this.props.create} delete ={this.props.delete} calendar = {foundCalendar}/>
                     }}
                     />
                     <Route path="/calendars" render = {()=> {

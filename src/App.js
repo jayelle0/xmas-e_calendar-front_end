@@ -5,13 +5,12 @@ import NavBar from "./Navbar"
 import CalendarContainer from './CalendarContainer.js'
 import Calendar from './Calendar.js'
 import Signup from './Signup.js'
-import Login from './Login.js'
+import Login from './LogIn.js'
 import Home from './Home'
 import CalendarForm from './CalendarForm.js' 
 
 export default class App extends React.Component {
   state = {
-    calendars: [],
     user: null 
   }
 
@@ -53,28 +52,27 @@ export default class App extends React.Component {
     })
     .then(response => response.json())
     .then(newCalendarObj => {
-      let newUser = {...this.state.user}
-      
-      let newNewUser= newUser.calendars.concat(newCalendarObj)
-      this.setState({user: newNewUser})
-      console.log(newUser)
-      this.renderCalendarDays(newCalendarObj)
+      let newUser = {...this.state.user} 
+      let newCalendars= newUser.calendars.concat(newCalendarObj)
+      newUser.calendars = newCalendars
+      this.setState({user: newUser})
+      this.renderCalendarDays(newCalendarObj, newUser)
       //  pass in new user array as an argument, find index from this array and setstate with new array 
-      debugger
+     
 
       // this.setState({
       //   calendars: this.state.calendars.concat(newCalendarObj)
       // })
     })
-    // .then(data => {console.log(data)})
   }
   
-  renderCalendarDays = (calObj) => {
+  renderCalendarDays = (calObj, userObj) => {
     const token = localStorage.getItem('token');
     let date = 0
-    // let newArray = [...this.state.calendars]
-    // let index = newArray.findIndex(calendar => calendar.id === id)
-    // console.log(newArray)
+    let newArray = {...userObj}
+    let index = userObj.calendars.findIndex(calendar => calendar.id === calObj.id)
+    let dayArray = []
+    console.log(newArray)
     for (let i = 0; i < 24; i++) {
       date ++
       fetch('http://localhost:3000/days', {
@@ -88,17 +86,13 @@ export default class App extends React.Component {
               calendar_id: calObj.id
           })
         })
-      //   .then(response => response.json())
-      //   .then(newDayObj=> {
-      //     console.log(index)
-      //     newArray[index].days.concat(newDayObj)
-      //     this.setState({calendars:newArray})
-        
-      // })
+        .then(response => response.json())
+        .then(newDayObj=> {
+          dayArray.push(newDayObj)
+      })
     }
-    // this.setState({
-    //   calendars: this.state.calendars.concat(calObj)
-    // })
+    newArray.calendars[index].days = dayArray
+    this.setState({user: newArray})
   }
     
     signupSubmitHandler = (newUser) => {
@@ -121,7 +115,6 @@ export default class App extends React.Component {
   }
 
   loginHandler = (userLogin) => {
-
   fetch('http://localhost:3000/login', {
     method: 'POST',
     headers: {
@@ -140,6 +133,49 @@ export default class App extends React.Component {
 
     })
 }
+
+    createDayData = (id, dayState) => {
+      const token = localStorage.getItem('token');
+      fetch(`http://localhost:3000/days/${id}`, {
+          method: "PATCH",
+          headers: {
+              "Content-Type": "application/json",
+              "Accepts": "application/json",
+              "Authorization": `Bearer ${token}`
+          },
+          body: JSON.stringify(dayState)
+      })
+          .then(response => response.json())
+          .then((updatedDayObj) => {
+            let newUser = {...this.state.user}
+            let calendarIndex= newUser.calendars.findIndex(calendar=> calendar.id === dayState.calendar_id)
+            let dayIndex = newUser.calendars[calendarIndex].days.findIndex(day=> day.id === id )
+             newUser.calendars[calendarIndex].days[dayIndex] = updatedDayObj
+             this.setState({user:newUser})
+             debugger
+
+          // this.props.submitHandler(this.state);
+      })
+      
+    }
+    deleteDayData = (id, dayState)=> {
+      const token = localStorage.getItem('token');
+      const data = {
+        content: "", 
+        image_video: "", 
+        calendar_id: this.props.calendarId, 
+        date: this.props.date
+      }
+      fetch(`http://localhost:3000/days/${id}`, {
+          method: "PATCH",
+          headers: {
+              "Content-Type": "application/json",
+              "Accepts": "application/json",
+              "Authorization": `Bearer ${token}`
+          },
+          body: JSON.stringify(data)
+      })
+    }   
     
   
   render(){
@@ -151,7 +187,7 @@ export default class App extends React.Component {
           <Route exact path="/signup"render={() => <Signup submitHandler = {this.signupSubmitHandler}/>}/>
           <Route exact path="/login" render={() => <Login loginHandler = {this.loginHandler}/>}/>
           <Route exact path="/" component={Home}/>
-          <Route exact path="/calendars" render={() => <CalendarContainer user= {this.state.user} calendars = {this.state.calendars}/>}/>
+          <Route exact path="/calendars" render={() => <CalendarContainer create= {this.createDayData} delete={ this.deleteDayData} user= {this.state.user} />}/>
           <Route exact path ="/calendar-form" render={()=> <CalendarForm user= {this.state.user} calendarForm={this.calendarForm} />}/>
         </div>
       </Router>

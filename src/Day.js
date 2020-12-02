@@ -21,7 +21,7 @@ class Day extends React.Component {
                 <h5>{this.state.dayObj.date}</h5>
                 <h3>{this.state.dayObj.content}</h3>
                 <button onClick={this.renderDayForm}>Edit</button>
-                <DayForm display = {this.state.display} id= {this.props.day.id} date = {this.props.date} calendarId = {this.props.calendarId} submitHandler={this.submitHandler}/>
+                <DayForm create ={this.props.create} delete={this.props.delete} display = {this.state.display} id= {this.props.day.id} date = {this.props.date} calendarId = {this.props.calendarId} submitHandler={this.submitHandler}/>
             </div>
         )
     }

@@ -8,33 +8,17 @@ class DayForm extends React.Component {
         date: this.props.date
     }
     localClickHandlerCreate = () => {
-        this.createDayData(this.props.id)
+        this.props.create(this.props.id, this.state)
     }
     localClickHandlerDelete = () => {
-        this.deleteDayData(this.props.id)
+        this.setState({content: "", 
+        image_video: "", 
+        calendar_id: this.props.calendarId, 
+        date: this.props.date
+    })
+    this.props.delete(this.props.id, this.state)
     }
-    createDayData = (id) => {
-        fetch(`http://localhost:3000/days/${id}`, {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(this.state)
-        })
-            .then(response => response.json())
-            .then(() => {
-            this.props.submitHandler(this.state);
-         })
-    }
-    deleteDayData = (id)=> {
-        fetch(`http://localhost:3000/days/${id}`, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json",
-                "Accepts": "application/json"
-            }
-        })
-    }   
+    
     changeHandler = event => {
         this.setState({[event.target.name]: event.target.value})
        
