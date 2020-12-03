@@ -25,10 +25,11 @@ class CalendarContainer extends React.Component {
     render(){
 
         return (
-        <>
+            <>
+            <h1 className="my-calendar">My Calendars</h1>
+            <hr></hr>
             {this.props.user?
             <>
-           
             { this.props.user === undefined? <h1> Loading Calendars</h1> :
                 <div>
                     <Router>

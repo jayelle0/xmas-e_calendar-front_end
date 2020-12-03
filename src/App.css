@@ -175,3 +175,10 @@ html, body {
   margin: auto;
   padding-top: 75px;
 }
+
+.my-calendar {
+  /* padding-left: 6rem; */
+  text-align: center;
+  padding-top: 6rem;
+  text-shadow: 2px 1px 3px rgba(129, 129, 131, 0.86);
+}

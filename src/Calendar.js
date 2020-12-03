@@ -14,7 +14,7 @@ class Calendar extends React.Component{
     render() {
         return (
             <div className = "calendar">
-                <h1>Countdown to Christmas!</h1>
+                <h1 className ="my-calendar">Countdown to Christmas!</h1>
             <div id="calendar-container">
                 {this.renderCalendarDays()}
             </div>
