@@ -2,44 +2,34 @@ import React from 'react'
 
 class DayForm extends React.Component {
     state = {
-        content: "", 
-        image_video: "", 
+        content: this.props.day.content, 
+        image_video: this.props.day.image_video, 
         calendar_id: this.props.calendarId, 
-        date: this.props.date
+        date: this.props.day.date
     }
-    localClickHandlerCreate = () => {
-        this.props.create(this.props.id, this.state)
-    }
-    localClickHandlerDelete = () => {
-        this.setState({content: "", 
-        image_video: "", 
-        calendar_id: this.props.calendarId, 
-        date: this.props.date
-    })
-    this.props.delete(this.props.id, this.state)
-    }
+   
     
     changeHandler = event => {
         this.setState({[event.target.name]: event.target.value})
-       
+        
     }
-
+    
     submitHandler = event => {
-        return event.preventDefault() 
+        event.preventDefault() 
+        this.props.createDayData(this.props.day.id, this.state)
     }
 
     render() {
-        return this.props.display ? 
-        (
+        console.log(this.props)
+        return(
             <form onSubmit={this.submitHandler}> 
                  <input type ="text" name= "content" placeholder= "enter message" value= {this.state.content} onChange= {this.changeHandler}/> <br/>
                 <input type ="text" name= "image_video" placeholder= "include image/ video" value= {this.state.image_video} onChange= {this.changeHandler}/><br/>
-                <input onClick={this.localClickHandlerCreate} type ="submit" value ="Create/Update"/><br/>
-                <input onClick={this.localClickHandlerDelete}type ="submit" value ="Delete"/><br/>
+                <input type ="submit" value ="Create/Update"/><br/>
             </form>
         )
-        :
-        ""
+        // :
+        // ""
     }
 }
 

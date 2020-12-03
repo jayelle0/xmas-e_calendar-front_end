@@ -1,4 +1,6 @@
 import React from 'react' 
+import {Redirect} from 'react-router-dom'
+import {Form} from 'react-bootstrap'
 
 export default class CalendarForm extends React.Component {
 
@@ -22,10 +24,22 @@ export default class CalendarForm extends React.Component {
 
     render() {
         return  (
-            <form onSubmit={this.newCalendar}>
-            <label>Name Your Calendar</label>
-            <input onChange={this.changeHandler} value={this.state.name} name="name" ></input>
-            <button type="submit">Submit</button></form> 
+            <>
+            {this.props.user ?
+                <>
+                <div className="calendar-name-div">
+                    <form className="login" onSubmit={this.newCalendar}>
+                        <Form.Group>
+                            <Form.Control class="calendar-name-input" onChange={this.changeHandler} value={this.state.name} name="name" placeholder= "Include Calendar Name" />
+                            <button className="sign-up-button" type="submit">Submit</button>
+                        </Form.Group>
+                    </form> 
+                </div>
+                </>
+            :
+                <Redirect to="/"/>
+            }
+            </>
         )
     }
 }

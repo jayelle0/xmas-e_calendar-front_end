@@ -14,26 +14,6 @@ class App extends React.Component {
     user: null 
   }
 
-//   componentDidMount=() => {
-//     const token = localStorage.getItem('token');
-//     if (token ){
-//       let id = this.state.user.id
-//     fetch(`http://localhost:3000/users/${id}`, {
-//       method: 'GET',
-//       headers: {
-//         Authorization: `Bearer ${token}`
-//       }
-//     }) 
-//     .then(r => r.json())
-//     .then(user => {
-//       this.setState({ calendars: user.calendar })
-    
-//     })
-//   } 
-// }
-
-
-
   calendarForm = (newCalendar) => {
    let id = this.state.user.id
    const token = localStorage.getItem('token');
@@ -56,12 +36,7 @@ class App extends React.Component {
       newUser.calendars = newCalendars
       this.setState({user: newUser})
       this.renderCalendarDays(newCalendarObj, newUser)
-      //  pass in new user array as an argument, find index from this array and setstate with new array 
-     
-
-      // this.setState({
-      //   calendars: this.state.calendars.concat(newCalendarObj)
-      // })
+ 
     })
   }
   
@@ -90,7 +65,9 @@ class App extends React.Component {
       })
     }
     newArray.calendars[index].days = dayArray
-    this.setState({user: newArray})
+    this.setState({user: newArray}
+      , () => this.props.history.push('/calendars')
+      )
   }
     
     signupSubmitHandler = (newUser) => {
@@ -105,7 +82,8 @@ class App extends React.Component {
       })
       .then(r => r.json())
       .then(newUserObj => {
-        this.setState({user:newUserObj.user})
+        this.setState({user:newUserObj.user}
+          , () => this.props.history.push('/calendar-form'))
         localStorage.setItem("token", newUserObj.jwt)
 
       });
@@ -150,39 +128,19 @@ class App extends React.Component {
             let dayIndex = newUser.calendars[calendarIndex].days.findIndex(day=> day.id === parseInt(id) )
             newUser.calendars[calendarIndex].days.splice(dayIndex,1,updatedDayObj)
             this.setState({user:newUser})
-            // debugger
-
-          // this.props.submitHandler(this.state);
-      })
-      
+            console.log(this.state.user)
+      })  
     }
-    deleteDayData = (id, dayState)=> {
-      const token = localStorage.getItem('token');
-      const data = {
-        content: "", 
-        image_video: "", 
-        calendar_id: this.props.calendarId, 
-        date: this.props.date
-      }
-      fetch(`http://localhost:3000/days/${id}`, {
-          method: "PATCH",
-          headers: {
-              "Content-Type": "application/json",
-              "Accepts": "application/json",
-              "Authorization": `Bearer ${token}`
-          },
-          body: JSON.stringify(data)
-      })
-    }
+  
     
     renderCalendars = () => {
-      return <CalendarContainer deleteCalendar={this.deleteCalendar} create= {this.createDayData} delete={ this.deleteDayData} user= {this.state.user}/>
+      return <CalendarContainer deleteCalendar={this.deleteCalendar} delete={ this.deleteDayData} user= {this.state.user}/>
     }
     
   renderCalendar = (routerProps) => {
     let id= parseInt(routerProps.match.params.id)
     let foundCalendar =this.state.user.calendars.find((calendar)=> calendar.id === id)
-    return  <Calendar calendar = {foundCalendar} create={this.createDayData} delete ={this.deleteDayData}/>
+    return  <Calendar calendar = {foundCalendar} createDayData={this.createDayData}/>
   }
 
   deleteCalendar = (id) => {

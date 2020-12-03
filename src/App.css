@@ -1,3 +1,10 @@
+html, body {
+  height: 100%;
+  background-image: url(./assets/xmas-bckgrd.jpg);
+  background-size: 100%;
+  overflow: auto;
+  background-repeat: no-repeat;
+}
 .App {
   text-align: center;
 }
@@ -47,15 +54,124 @@
 }
 
 .day {
-  height: 120px;
-  width: 120px;
+  height: 10rem;
+  width: 10rem;
   border: 1px solid black;
 }
+.card {
+  opacity: 0.8;
+}
+.calendar-card{
+  max-width: 30%;
+  margin: 3rem;
+}
 
-.container {
+#calendar-container {
   display: grid;
-  grid-template-columns: 120px 120px 120px 120px 120px;
-  grid-template-rows: auto;
+  justify-content: center;
+  margin-top: 30px;
+  grid-template-columns:  10rem 10rem 10rem 10rem 10rem 10rem;
+  grid-template-rows: 10rem 10rem 10rem 10rem;
   grid-template-areas: 
-    "day day day day day day day";
+    "day day day day day day";
+}
+
+.login {
+  text-align: center;
+  margin-top: 3rem;
+}
+.login-div{
+  display: flex;
+  justify-content: center;
+}
+
+.home-buttons-container {
+  height: 100%;
+  width: auto;
+}
+.home-button {
+  margin: 2px;
+}
+
+.card-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 60px;
+  justify-content: center;
+  align-items: flex-end;
+  /* display: none; */
+  opacity: 0 
+}
+
+/* .card:hover + .card-buttons  {
+  display: block; */
+    /* display: block
+  }
+   */
+
+  .card-buttons:hover {
+    opacity: 1;
+  }
+.calendar h1{
+  justify-content: center;
+  border: 1px 
+
+}
+
+.edit {
+  height: 40px;
+  width: 40px;
+  background-image: url(/Users/reid/Development/code/Mod4/phase-4-project/xmas-e_calendar-front_end/src/assets/pencil.png);
+  background-size: 100%;
+  border-width: 0px;
+  /* opacity: 0.8; */
+  border-radius: 10%;
+  /* border: 1px solid grey; */
+  margin-right: 7px;
+
+}
+
+.surprise {
+  height: 40px;
+  width: 40px;
+  background-image: url(/Users/reid/Development/code/Mod4/phase-4-project/xmas-e_calendar-front_end/src/assets/giftbox.png);
+  background-size: 100%;
+  border-width: 0px;
+  /* opacity: 0.8; */
+  border-radius: 10%;
+  /* border: 1px solid grey; */
+  margin-left: 7px;
+
+}
+
+/* .{
+  margin-left: 10px;
+} */
+
+.navbar-nav > li{
+  padding-left:30px;
+  padding-right:30px;
+}
+
+.title {
+  padding-top: 150px;
+  font-size: 50px;
+}
+
+.signup {
+  margin-top: 3rem;
+}
+
+.sign-up-button {
+  background-color: rgb(245, 58, 58);
+  color: black;
+  font-weight: bold;
+  
+}
+
+.calendar-name-div {
+  max-width: 30%;
+  text-align: center;
+  margin: auto;
+  padding-top: 75px;
 }
